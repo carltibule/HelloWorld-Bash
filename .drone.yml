@@ -7,7 +7,7 @@ steps:
     image: plugins/docker
     pull: if-not-exists
     settings:
-      registry: gitea.iwanaga.moe/cjtibule/helloworld-bash
+      registry: gitea.iwanaga.moe
       username: cjtibule
       password: 39a40e7639bede6b7cb2235cc7154ec677dda6f8
       repo: helloworld-bash
