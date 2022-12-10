@@ -15,8 +15,8 @@ steps:
   - name: notify
     image: appleboy/drone-discord
     settings:
-      webhook_id:1044442756841492560
-      webhook_token:-Aa35zja_f8wRXJiLayuUPFXm1D5nR6Yr5MPkHhmdXScGqdiYhJvOZtaNdwP3kBvX1UC
+      - webhook_id:1044442756841492560
+      - webhook_token:-Aa35zja_f8wRXJiLayuUPFXm1D5nR6Yr5MPkHhmdXScGqdiYhJvOZtaNdwP3kBvX1UC
     when:
       branch:
         - master
