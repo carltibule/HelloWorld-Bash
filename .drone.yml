@@ -8,6 +8,7 @@ steps:
     pull: if-not-exists
     settings:
       registry: gitea.iwanaga.moe/cjtibule/helloworld-bash
+      username: cjtibule
       password: 39a40e7639bede6b7cb2235cc7154ec677dda6f8
       repo: helloworld-bash
       tags: latest
