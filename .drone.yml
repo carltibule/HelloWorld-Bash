@@ -11,19 +11,21 @@ steps:
       username: cjtibule
       password: 39a40e7639bede6b7cb2235cc7154ec677dda6f8
       repo: gitea.iwanaga.moe/cjtibule/helloworld-bash
-      tags: latest
+      auto_tag: true
       dockerfile: ./Dockerfile
   - name: notify
     image: appleboy/drone-discord
     settings:
-      webhook_id: 1044442756841492560
-      webhook_token: -Aa35zja_f8wRXJiLayuUPFXm1D5nR6Yr5MPkHhmdXScGqdiYhJvOZtaNdwP3kBvX1UC
+      webhook_id: 
+        from_secret: DISCORD_WEBHOOK_ID
+      webhook_token: 
+        from_secret: DISCORD_WEBHOOK_TOKEN
     when:
       branch:
         - master
+        - develop
       status:
         - failure
-        - success
 trigger:
   branch:
     - master
