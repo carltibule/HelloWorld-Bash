@@ -11,7 +11,9 @@ steps:
       username: cjtibule
       password: 39a40e7639bede6b7cb2235cc7154ec677dda6f8
       repo: gitea.iwanaga.moe/cjtibule/helloworld-bash
-      auto_tag: true
+      tags: 
+        - latest-dev
+        - '0.1.0'
       dockerfile: ./Dockerfile
   - name: notify
     image: appleboy/drone-discord
