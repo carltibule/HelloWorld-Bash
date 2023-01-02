@@ -1,0 +1,25 @@
+name: Hello World Bash Demo
+run-name: Testing out workflow on master branch
+on:
+  push:
+    branches:
+      - master
+jobs:
+  release_management:
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Increment Version
+      runs-on: [self-hosted, linux],
+      uses: paulhatch/semantic-version@v5.0.2
+      with:
+        tag_prefix: "v"
+        major_pattern: "(MAJOR)"
+        minor_pattern: "(MINOR)"
+        patch_pattern: "(PATCH)"
+        version_format: "${major}.${minor}.${patch}-prerelease${increment}"
+        change_path: "."
+        namespace: "HelloWorldBash"
+        bump_each_commit: false
