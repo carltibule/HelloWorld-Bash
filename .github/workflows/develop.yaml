@@ -22,7 +22,7 @@ jobs:
         patch_pattern: "(PATCH)"
         version_format: "${major}.${minor}.${patch}-prerelease${increment}"
         change_path: "."
-        namespace: "HelloWorldBash"
+        namespace: "dev"
         bump_each_commit: false
     - name: Create new Tag
       id: create_new_tag
