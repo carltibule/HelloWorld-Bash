@@ -1,0 +1,70 @@
+name: Release Management Workflow
+run-name: Release Management Workflow
+on:
+  push:
+    branches:
+      - develop
+      - master
+  pull_request:
+    types:
+      - closed
+    branches:
+      - develop
+      - master
+jobs:
+  get_branch_specific_outputs:
+    runs-on: [self-hosted, linux]
+    outputs:
+      version_namespace: ${{ steps.get_version_namespace.outputs.version_namespace }}
+      latest_tag: ${{ steps.get_name_for_latest_tag.outputs.tag_name }}
+    steps:
+      - id: get_version_namespace
+        name: Determine Version Namespace
+        run: grep -q "master" <<< ${{ github.ref }} && echo "version_namespace=""" >> $GITHUB_OUTPUT || echo "version_namespace="dev"" >> $GITHUB_OUTPUT
+      - id: get_name_for_latest_tag
+        name: Get name for use with latest tag
+        run: grep -q "master" <<< ${{ github.ref }} && echo "tag_name="latest"" >> $GITHUB_OUTPUT || echo "tag_name="dev:latest"" >> $GITHUB_OUTPUT
+  release_management:
+    runs-on: [self-hosted, linux]
+    needs: get_branch_specific_outputs
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Increment Version
+        id: increment_version
+        uses: paulhatch/semantic-version@v5.0.2   
+        with:
+          tag_prefix: "v"
+          major_pattern: "(MAJOR)"
+          minor_pattern: "(MINOR)"
+          patch_pattern: "(PATCH)"
+          version_format: "${major}.${minor}.${patch}-prerelease${increment}"
+          change_path: "."
+          namespace: ${{ needs.get_branch_specific_outputs.version_namespace }}
+          bump_each_commit: false
+      - name: Create new Tag
+        id: create_new_tag
+        run: |
+            git tag ${{ steps.increment_version.outputs.version_tag }}
+            git push origin ${{ steps.increment_version.outputs.version_tag }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Login to ghcr.io
+        uses: docker/login-action@v2
+        with:
+            registry: ghcr.io
+            username: ${{ github.actor }}
+            password: ${{ secrets.GH_REGISTRY_PAT }}
+      - name: Debug
+        run: echo ${{ needs.get_branch_specific_outputs.latest_tag }}
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ghcr.io/${{ secrets.GHCR_REPO_NAME }}:${{ steps.increment_version.outputs.version_tag }}
+            ghcr.io/${{ secrets.GHCR_REPO_NAME }}:${{ needs.get_branch_specific_outputs.latest_tag }}
