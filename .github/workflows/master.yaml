@@ -1,4 +1,4 @@
-name: Hello World Bash Demo
+name: Master Branch Workflow
 run-name: Testing out workflow on master branch
 on:
   push:
@@ -6,10 +6,10 @@ on:
       - master
 jobs:
   release_management:
+    runs-on: self-hosted
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-      runs-on: self-hosted
       with:
         fetch-depth: 0
     - name: Increment Version
