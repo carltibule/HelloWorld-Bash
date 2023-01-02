@@ -12,17 +12,20 @@ jobs:
     steps:
       - name: Echo Event
         run: echo ${{ github.event.pull_request.merged }}
-      - name: Echo github ref
-        run: echo ${{ github.ref }}
-  release_management:
-    runs-on: [self-hosted, linux]
-    if: github.event.pull_request.merged == true && contains(github.ref, 'release/')
-    steps:
-      - name: Echo Release
-        run: echo 'This is a release'
-  bugfix_management:
-    runs-on: [self-hosted, linux]
-    if: github.event.pull_request.merged == true && contains(github.ref, 'bugfix/')
-    steps:
-      - name: Echo Bugfix
-        run: echo 'This is a bugfix'
+      - name: Echo github stuff
+        run: |
+          echo ${{ github.ref }}
+          echo ${{ github.base_ref }}
+          echo ${{ github.head_ref }}
+  # release_management:
+  #   runs-on: [self-hosted, linux]
+  #   if: github.event.pull_request.merged == true && contains(github.ref, 'release/')
+  #   steps:
+  #     - name: Echo Release
+  #       run: echo 'This is a release'
+  # bugfix_management:
+  #   runs-on: [self-hosted, linux]
+  #   if: github.event.pull_request.merged == true && contains(github.ref, 'bugfix/')
+  #   steps:
+  #     - name: Echo Bugfix
+  #       run: echo 'This is a bugfix'
