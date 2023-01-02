@@ -63,6 +63,7 @@ jobs:
         run: exit 1
       - id: build_and_push_container
         name: Build and push
+        if: steps.login_to_container_registry.outcome != 'success'
         uses: docker/build-push-action@v2
         with:
           context: .
