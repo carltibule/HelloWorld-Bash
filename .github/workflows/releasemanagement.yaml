@@ -64,5 +64,6 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
+            echo ${{ needs.get_branch_specific_outputs.get_name_for_latest_tag }}
             ghcr.io/${{ secrets.GHCR_REPO_NAME }}:${{ steps.increment_version.outputs.version_tag }}
             ghcr.io/${{ secrets.GHCR_REPO_NAME }}:${{ needs.get_branch_specific_outputs.get_name_for_latest_tag }}
