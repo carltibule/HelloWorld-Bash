@@ -39,8 +39,7 @@ jobs:
         name: Debug
         run: |
           echo ${{ github.event_name }}
-          echo ${{ github.event }}
-          echo ${{ github.event_path_action }}
+          echo ${{ github.event.action }}
       # - id: delete_previous_version
       #   name: Delete previous version if PR is updated
       #   if: ${{ github.event_name == 'pull_request' && }}
