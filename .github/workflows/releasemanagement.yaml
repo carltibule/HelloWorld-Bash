@@ -74,7 +74,7 @@ jobs:
         continue-on-error: true
       - id: revert_tag
         name: Delete tag if login or upload to registry steps fails
-        if: ${{ steps.login_to_container_registry.outcome != 'success' }} || ${{ steps.build_and_push_container.outcome != 'success' }}
+        if: steps.login_to_container_registry.outcome != 'success' || steps.build_and_push_container.outcome != 'success' 
         run: |
           git tag -d ${{ steps.increment_version.outputs.version_tag }}
           git push --delete origin ${{ steps.increment_version.outputs.version_tag }}
