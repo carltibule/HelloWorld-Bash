@@ -46,7 +46,7 @@ jobs:
         name: Get Semantic Version from git tag
         run: |
           latestDevTag="v.2.0.5-dev"
-          removedSuffix="${latestDevTag%"dev-"}"
+          removedSuffix="${latestDevTag%"-dev"}"
           echo "${removedSuffix#"v"}"
       - id: get_semantic_version_prod
         name: Get Semantic Version from git tag
