@@ -40,6 +40,8 @@ jobs:
         run: |
           echo ${{ github.event_name }}
           echo ${{ github.event.action }}
+          echo ${{ needs.get_branch_specific_outputs.outputs.version_namespace }}
+          echo ${{ needs.get_branch_specific_outputs.outputs.latest_tag }}
       # - id: delete_previous_version
       #   name: Delete previous version if PR is updated
       #   if: ${{ github.event_name == 'pull_request' && }}
