@@ -24,7 +24,7 @@ jobs:
       - id: get_name_for_latest_tag
         name: Get name for use with latest tag
         run: grep -q "master" <<< ${{ github.ref }} && echo "tag_name=latest" >> $GITHUB_OUTPUT || echo "tag_name=dev:latest" >> $GITHUB_OUTPUT
-      - id: output versions
+      - name: output versions
         run: |
           echo ${{ steps.get_version_namespace.outputs.version_namespace }}
           echo ${{ steps.get_name_for_latest_tag.outputs.tag_name }}
