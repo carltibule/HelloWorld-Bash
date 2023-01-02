@@ -20,35 +20,26 @@ jobs:
       version_namespace: ${{ steps.get_version_namespace.outputs.version_namespace }}
       latest_tag: ${{ steps.get_name_for_latest_tag.outputs.tag_name }}
     steps:
-      - id: get_version_namespace_push
-        name: Determine Version Namespace (Push)
-        if: github.event_name == 'push'
-        run: grep -q "master" <<< ${{ github.ref }} && echo "version_namespace=" >> $GITHUB_OUTPUT || echo "version_namespace=dev" >> $GITHUB_OUTPUT
-      - id: get_name_for_latest_tag_push
-        name: Get name for use with latest tag (Push)
-        if: github.event_name == 'push'
-        run: grep -q "master" <<< ${{ github.ref }} && echo "tag_name=latest" >> $GITHUB_OUTPUT || echo "tag_name=latest-dev" >> $GITHUB_OUTPUT
-      - id: get_version_namespace_pr
-        name: Determine Version Namespace (PR)
-        if: github.event_name == 'pull_request'
-        run: grep -q "master" <<< ${{ github.base_ref }} && echo "version_namespace=" >> $GITHUB_OUTPUT || echo "version_namespace=dev" >> $GITHUB_OUTPUT
-      - id: get_name_for_latest_tag_pr
-        name: Get name for use with latest tag (PR)
-        if: github.event_name == 'pull_request'
-        run: grep -q "master" <<< ${{ github.base_ref }} && echo "tag_name=latest" >> $GITHUB_OUTPUT || echo "tag_name=latest-dev" >> $GITHUB_OUTPUT
-
+      - id: get_version_namespace
+        name: Determine Version Namespace 
+        run: grep -q "master" <<< ${{ if [ github.event_name == 'push']; then github.ref else github.base_ref fi }} && echo "version_namespace=" >> $GITHUB_OUTPUT || echo "version_namespace=dev" >> $GITHUB_OUTPUT
+      - id: get_name_for_latest_tag
+        name: Get name for use with latest tag
+        run: grep -q "master" <<< ${{ if [ github.event_name == 'push']; then github.ref else github.base_ref fi }} && echo "tag_name=latest" >> $GITHUB_OUTPUT || echo "tag_name=latest-dev" >> $GITHUB_OUTPUT
   release_management:
     runs-on: [self-hosted, linux]
     needs: get_branch_specific_outputs
     steps:
-      - id: checkout_repo
-        name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
       - id: debug
         name: debug
-        run: echo ${{ needs.get_branch_specific_outputs.outputs.version_namespace }}
+        run: |
+          echo ${{ needs.get_branch_specific_outputs.outputs.version_namespace }}
+          echo ${{ needs.get_branch_specific_outputs.outputs.latest_tag }}
+      # - id: checkout_repo
+      #   name: Checkout
+      #   uses: actions/checkout@v2
+      #   with:
+      #     fetch-depth: 0
       # - id: increment_version
       #   name: Increment Version
       #   uses: paulhatch/semantic-version@v5.0.2   
@@ -56,6 +47,7 @@ jobs:
       #     tag_prefix: "v"
       #     major_pattern: "(MAJOR)"
       #     minor_pattern: "(MINOR)"
+      #     patch_pattern: "(PATCH)"
       #     version_format: "${major}.${minor}.${patch}-prerelease${increment}"
       #     change_path: "."
       #     namespace: ${{ needs.get_branch_specific_outputs.outputs.version_namespace }}
