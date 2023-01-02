@@ -12,7 +12,7 @@ jobs:
       with:
         fetch-depth: 0
     - name: Increment Version
-      runs-on: [self-hosted, linux],
+      runs-on: [self-hosted, linux]
       uses: paulhatch/semantic-version@v5.0.2
       with:
         tag_prefix: "v"
