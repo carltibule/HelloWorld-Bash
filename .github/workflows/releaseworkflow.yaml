@@ -1,0 +1,23 @@
+name: Release Branch Workflow
+run-name: Release Branch Workflow
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - master
+jobs:
+  release_management:
+    runs-on: [self-hosted, linux]
+    if: github.event.pull_request.merged == true && contains($GITHUB_REF, 'release/')
+    steps:
+      - name: Echo Release
+        uses: shell
+        run: echo 'This is a release'
+  bugfix_management:
+    runs-on: [self-hosted, linux]
+    if: github.event.pull_request.merged == true && contains($GITHUB_REF, 'bugfix/')
+    steps:
+      - name: Echo Bugfix
+        uses: shell
+        run: echo 'This is a bugfix'

@@ -1,0 +1,48 @@
+name: Develop Branch Workflow
+run-name: Develop Branch Workflow
+on:
+  push:
+    branches:
+      - develop
+jobs:
+  release_management:
+    runs-on: [self-hosted, linux]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Increment Version
+      id: increment_version
+      uses: paulhatch/semantic-version@v5.0.2   
+      with:
+        tag_prefix: "v"
+        major_pattern: "(MAJOR)"
+        minor_pattern: "(MINOR)"
+        patch_pattern: "(PATCH)"
+        version_format: "${major}.${minor}.${patch}-prerelease${increment}"
+        change_path: "."
+        namespace: "dev"
+        bump_each_commit: false
+    - name: Create new Tag
+      id: create_new_tag
+      run: |
+          git tag ${{ steps.increment_version.outputs.version_tag }}
+          git push origin ${{ steps.increment_version.outputs.version_tag }}
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    - name: Login to ghcr.io
+      uses: docker/login-action@v2
+      with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GH_REGISTRY_PAT }}
+    - name: Build and push
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        platforms: linux/amd64
+        push: true
+        tags: |
+          ghcr.io/${{ secrets.GHCR_REPO_NAME }}:${{ steps.increment_version.outputs.version_tag }}
+          ghcr.io/${{ secrets.GHCR_REPO_NAME }}:latest-dev

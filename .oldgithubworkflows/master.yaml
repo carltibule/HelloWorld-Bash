@@ -21,5 +21,4 @@ jobs:
         patch_pattern: "(PATCH)"
         version_format: "${major}.${minor}.${patch}-prerelease${increment}"
         change_path: "."
-        namespace: "HelloWorldBash"
         bump_each_commit: false
