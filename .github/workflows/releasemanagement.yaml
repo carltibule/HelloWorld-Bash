@@ -63,15 +63,14 @@ jobs:
       - id: build_and_push_container
         name: Build and push
         if: steps.login_to_container_registry.outcome != 'success'
-        # uses: docker/build-push-action@v2
-        # with:
-        #   context: .
-        #   platforms: linux/amd64
-        #   push: true
-        #   tags: |
-        #     ghcr.io/${{ secrets.GHCR_REPO_NAME }}:${{ steps.increment_version.outputs.version_tag }}
-        #     ghcr.io/${{ secrets.GHCR_REPO_NAME }}:${{ needs.get_branch_specific_outputs.outputs.latest_tag }}
-        run: exit 1
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ghcr.io/${{ secrets.GHCR_REPO_NAME }}:${{ steps.increment_version.outputs.version_tag }}
+            ghcr.io/${{ secrets.GHCR_REPO_NAME }}:${{ needs.get_branch_specific_outputs.outputs.latest_tag }}
         continue-on-error: true
       - id: revert_tag
         name: Delete tag if login or upload to registry steps fails
