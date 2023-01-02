@@ -7,24 +7,16 @@ on:
     branches:
       - master
 jobs:
-  # test:
-  #   runs-on: [self-hosted, linux]
-  #   steps:
-  #     - name: Echo Event
-  #       run: echo ${{ github.event.pull_request.merged }}
-  #     - name: Echo github stuff
-  #       run: |
-  #         echo ${{ github.ref }}
-  #         echo ${{ github.base_ref }}
-  #         echo ${{ github.head_ref }} # THIS IS THE PR SOURCE BRANCH
-  checkout_repo:
+  test:
     runs-on: [self-hosted, linux]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-  
+      - name: Echo Event
+        run: echo ${{ github.event.pull_request.merged }}
+      - name: Echo github stuff
+        run: |
+          echo ${{ github.ref }}
+          echo ${{ github.base_ref }}
+          echo ${{ github.head_ref }}
   # release_management:
   #   runs-on: [self-hosted, linux]
   #   if: github.event.pull_request.merged == true && contains(github.ref, 'release/')
