@@ -23,7 +23,7 @@ jobs:
         run: grep -q "master" <<< ${{ github.ref }} && echo "version_namespace=""" >> $GITHUB_OUTPUT || echo "version_namespace="dev"" >> $GITHUB_OUTPUT
       - id: get_name_for_latest_tag
         name: Get name for use with latest tag
-        run: grep -q "master" <<< ${{ github.ref }} && echo "tag_name="latest""" >> $GITHUB_OUTPUT || echo "tag_name="dev:latest"" >> $GITHUB_OUTPUT
+        run: grep -q "master" <<< ${{ github.ref }} && echo "tag_name="latest"" >> $GITHUB_OUTPUT || echo "tag_name="dev:latest"" >> $GITHUB_OUTPUT
   release_management:
     runs-on: [self-hosted, linux]
     needs: get_branch_specific_outputs
