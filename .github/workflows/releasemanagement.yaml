@@ -42,15 +42,27 @@ jobs:
           echo ${{ github.event.action }}
           echo ${{ needs.get_branch_specific_outputs.outputs.version_namespace }}
           echo ${{ needs.get_branch_specific_outputs.outputs.latest_tag }}
-      - id: bump_dev_version
-        name: Bump dev tag
-        uses: christian-draeger/increment-semantic-version@1.0.3
-        with:
-          current-version: 'v2.0.5-dev'
-          version-fragment: 'feature'
-      - id: bump_version
-        name: Bump prod tag
-        uses: christian-draeger/increment-semantic-version@1.0.3
-        with:
-          current-version: 'v1.0.5'
-          version-fragment: 'feature'
+      - id: get_semantic_version
+        name: Get Semantic Version from git tag
+        run: |
+          latestDevTag="v.2.0.5-dev"
+          removedSuffix="${latestDevTag%"dev"}"
+          echo "${removedSuffix#"v"}"
+      - id: get_semantic_version_prod
+        name: Get Semantic Version from git tag
+        run: |
+          latestDevTag="v.1.0.5"
+          removedSuffix="${latestDevTag%"dev"}"
+          echo "${removedSuffix#"v"}"
+      # - id: bump_dev_version
+      #   name: Bump dev tag
+      #   uses: christian-draeger/increment-semantic-version@1.0.3
+      #   with:
+      #     current-version: 'v2.0.5-dev'
+      #     version-fragment: 'feature'
+      # - id: bump_version
+      #   name: Bump prod tag
+      #   uses: christian-draeger/increment-semantic-version@1.0.3
+      #   with:
+      #     current-version: 'v1.0.5'
+      #     version-fragment: 'feature'
