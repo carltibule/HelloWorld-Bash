@@ -62,7 +62,7 @@ jobs:
         continue-on-error: true
       - id: build_and_push_container
         name: Build and push
-        if: ${{ steps.login_to_container_registry.outcome != 'success' }}
+        if: steps.login_to_container_registry.outcome == 'success'
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -72,11 +72,6 @@ jobs:
             ghcr.io/${{ secrets.GHCR_REPO_NAME }}:${{ steps.increment_version.outputs.version_tag }}
             ghcr.io/${{ secrets.GHCR_REPO_NAME }}:${{ needs.get_branch_specific_outputs.outputs.latest_tag }}
         continue-on-error: true
-      - id: debug
-        name: Debug
-        run: |
-          echo ${{ steps.login_to_container_registry.outcome }}
-          echo ${{ steps.build_and_push_container.outcome }}
       - id: revert_tag
         name: Delete tag if login or upload to registry steps fails
         if: ${{ steps.login_to_container_registry.outcome != 'success' }} || ${{ steps.build_and_push_container.outcome != 'success' }}
