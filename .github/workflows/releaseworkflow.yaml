@@ -7,6 +7,13 @@ on:
     branches:
       - master
 jobs:
+  test:
+    runs-on: [self-hosted, linux]
+    steps:
+      - name: Echo Event
+        run: echo github.event.pull_request.merged
+      - name: Echo github ref
+        run: echo github.ref
   release_management:
     runs-on: [self-hosted, linux]
     if: github.event.pull_request.merged == true && contains(github.ref, 'release/')
