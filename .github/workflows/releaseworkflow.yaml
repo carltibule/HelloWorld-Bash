@@ -9,13 +9,13 @@ on:
 jobs:
   release_management:
     runs-on: [self-hosted, linux]
-    if: github.event.pull_request.merged == true && contains($GITHUB_REF, 'release/')
+    if: github.event.pull_request.merged == true && contains(github.ref, 'release/')
     steps:
       - name: Echo Release
         run: echo 'This is a release'
   bugfix_management:
     runs-on: [self-hosted, linux]
-    if: github.event.pull_request.merged == true && contains($GITHUB_REF, 'bugfix/')
+    if: github.event.pull_request.merged == true && contains(github.ref, 'bugfix/')
     steps:
       - name: Echo Bugfix
         run: echo 'This is a bugfix'
