@@ -45,15 +45,15 @@ jobs:
       - id: get_semantic_version
         name: Get Semantic Version from git tag
         run: |
-          latestDevTag="v.2.0.5-dev"
+          latestDevTag="v2.0.5-dev"
           removedSuffix="${latestDevTag%"-dev"}"
           echo "${removedSuffix#"v"}"
       - id: get_semantic_version_prod
         name: Get Semantic Version from git tag
         run: |
-          latestDevTag="v.1.0.5"
-          removedSuffix="${latestDevTag%"dev-"}"
-          echo "${removedSuffix#"v."}"
+          latestDevTag="v1.0.5"
+          removedSuffix="${latestDevTag%"-dev"}"
+          echo "${removedSuffix#"v"}"
       # - id: bump_dev_version
       #   name: Bump dev tag
       #   uses: christian-draeger/increment-semantic-version@1.0.3
