@@ -24,10 +24,6 @@ jobs:
       - id: get_name_for_latest_tag
         name: Get name for use with latest tag
         run: grep -q "master" <<< ${{ github.ref }} && echo "tag_name=latest" >> $GITHUB_OUTPUT || echo "tag_name=dev:latest" >> $GITHUB_OUTPUT
-      - name: output versions
-        run: |
-          echo ${{ steps.get_version_namespace.outputs.version_namespace }}
-          echo ${{ steps.get_name_for_latest_tag.outputs.tag_name }}
   release_management:
     runs-on: [self-hosted, linux]
     needs: get_branch_specific_outputs
@@ -46,7 +42,7 @@ jobs:
           patch_pattern: "(PATCH)"
           version_format: "${major}.${minor}.${patch}-prerelease${increment}"
           change_path: "."
-          namespace: ${{ needs.get_branch_specific_outputs.version_namespace }}
+          namespace: ${{ needs.get_branch_specific_outputs.outputs.version_namespace }}
           bump_each_commit: false
       - name: Create new Tag
         id: create_new_tag
@@ -61,8 +57,6 @@ jobs:
             registry: ghcr.io
             username: ${{ github.actor }}
             password: ${{ secrets.GH_REGISTRY_PAT }}
-      - name: Debug
-        run: echo ${{ needs.get_branch_specific_outputs.latest_tag }}
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
@@ -71,4 +65,4 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ secrets.GHCR_REPO_NAME }}:${{ steps.increment_version.outputs.version_tag }}
-            ghcr.io/${{ secrets.GHCR_REPO_NAME }}:${{ needs.get_branch_specific_outputs.latest_tag }}
+            ghcr.io/${{ secrets.GHCR_REPO_NAME }}:${{ needs.get_branch_specific_outputs.outputs.latest_tag }}
