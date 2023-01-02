@@ -1,5 +1,6 @@
 name: Hello World Bash Demo
 run-name: Testing out workflow on master branch
+runs-on: self-hosted
 on:
   push:
     branches:
@@ -9,12 +10,10 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-      runs-on: self-hosted
       with:
         fetch-depth: 0
     - name: Increment Version
-      uses: paulhatch/semantic-version@v5.0.2
-      runs-on: self-hosted
+      uses: paulhatch/semantic-version@v5.0.2   
       with:
         tag_prefix: "v"
         major_pattern: "(MAJOR)"
