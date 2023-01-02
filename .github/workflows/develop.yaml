@@ -44,5 +44,5 @@ jobs:
         platforms: linux/amd64
         push: true
         tags: |
-          ghcr.io/${{ github.repository }}:${{ steps.increment_version.outputs.version_tag }}
-          ghcr.io/${{ github.repository }}:latest-dev
+          ghcr.io/${{ secrets.GHCR_REPO_NAME }}:${{ steps.increment_version.outputs.version_tag }}
+          ghcr.io/${{ secrets.GHCR_REPO_NAME }}:latest-dev
